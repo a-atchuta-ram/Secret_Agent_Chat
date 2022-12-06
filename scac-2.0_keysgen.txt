@@ -1,0 +1,74 @@
+from tkinter import *
+import tkinter as tk
+from tkinter import messagebox
+from tkinter import scrolledtext
+from random import randint
+from tkinter import filedialog
+
+# from tkinter.scrolledtext import ScrolledText
+ALPHABET = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ'
+
+
+def saveFile():
+    myFile = filedialog.asksaveasfile(mode="w", defaultextension='.txt')
+    if myFile is None:
+        return
+    # data=keysEditor.get('1.0','end')
+    data = otpEntries.get()
+    myFile.write(data)
+    myFile.close()
+
+
+def genOTPs(*args):
+    try:
+        numotps = int(otpEntry.get())
+        outval = ""
+        for i in range(1, numotps + 1):
+            otp = str(randint(0, 26))
+            otps.append(otp)
+        outval = ",".join(otps)
+        # keysEditor.insert(1.0,outval)
+        otpEntries.set(outval)
+    except ValueError:
+        pass
+
+
+def write_tofile(k):
+    with open(k, 'a+') as myfile:
+        for c in otps:
+            myfile.write(str(c) + '\n')
+
+
+root = Tk()
+width = root.winfo_screenwidth()
+height = root.winfo_screenheight()
+root.geometry("%dx%d" % (width, height))
+root.title("Keys Generation Window")
+
+otps = []
+otpEntry = StringVar()
+otpLabel = StringVar()
+otpEntries = StringVar()
+
+tk.Label(root, text="Maximum Length of Message", background='black', fg='white', font=25).place(x=250, y=20)  # ----
+tk.Entry(root, textvariable=otpEntry, width=40,font=18).place(x=250, y=65)
+
+tk.Label(root, text="Generated Keys are", background='green', foreground="white",font=25).place(x=250, y=165)
+
+# Creating scrolled text
+# area widget
+tk.Entry(root, width=40, textvariable=otpEntries,font=18).place(x=250, y=205)
+
+tk.Button(root, text="Click to Generate OTPs", width=40, command=genOTPs,font=25,background='pink').place(x=250, y=245)
+
+# keysEditor = tk.Text(root,height=6,width=24)
+# keysEditor.grid(column=1, row=3, sticky=E)
+
+
+tk.Button(root, text="Save to File", width=10, command=saveFile,font=25).place(x=251, y=315)
+root.mainloop()
+
+
+
+
+
